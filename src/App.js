@@ -5,6 +5,9 @@ import logo from './logo.svg';
 function App() {
   const [isAvailable, setIsAvailable] = useState(false);
   const [activeTab, setActiveTab] = useState('map');
+  const [userLocation, setUserLocation] = useState(null);
+  const [locationLoading, setLocationLoading] = useState(true);
+  const [locationError, setLocationError] = useState(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [debugInfo, setDebugInfo] = useState('Initialisation...');
   const mapRef = useRef(null);
@@ -31,14 +34,17 @@ function App() {
     }
   }, []);
 
+  // Initialize map with user location
+  useEffect(() => {
+    getUserLocation(); // Get location on app start
+  }, []);
+
   // Initialize Google Maps
   useEffect(() => {
     const initializeMap = () => {
       console.log('🗺️ initializeMap called');
       console.log('🗺️ window.google:', !!window.google);
       console.log('🗺️ window.google.maps:', !!window.google?.maps);
-      console.log('🗺️ mapRef.current:', !!mapRef.current);
-      console.log('🗺️ mapLoaded:', mapLoaded);
       
       setDebugInfo('Vérification Google Maps...');
       
@@ -49,7 +55,7 @@ function App() {
         if (mapRef.current && !mapLoaded) {
           console.log('🗺️ Creating map instance...');
           const map = new window.google.maps.Map(mapRef.current, {
-            center: { lat: 48.8566, lng: 2.3522 },
+            center: userLocation ? { lat: userLocation.lat, lng: userLocation.lng } : { lat: 48.8566, lng: 2.3522 },
             zoom: 16,
             styles: [
               {
@@ -78,27 +84,27 @@ function App() {
           setMapLoaded(true);
           setDebugInfo('Carte initialisée ! Ajout des markers...');
 
-          // Add user marker
-          console.log('🗺️ Adding user marker...');
-          new window.google.maps.Marker({
-            position: { lat: 48.8566, lng: 2.3522 },
-            map: map,
-            title: 'TOI',
-            icon: {
-              path: window.google.maps.SymbolPath.CIRCLE,
-              scale: 10,
-              fillColor: '#3B82F6',
-              fillOpacity: 1,
-              strokeColor: '#FFFFFF',
-              strokeWeight: 2
-            }
-          });
+          // Add user marker if location available
+          if (userLocation) {
+            console.log('🗺️ Adding user marker...');
+            new window.google.maps.Marker({
+              position: { lat: userLocation.lat, lng: userLocation.lng },
+              map: map,
+              title: 'TOI',
+              icon: {
+                path: window.google.maps.SymbolPath.CIRCLE,
+                scale: 10,
+                fillColor: '#3B82F6',
+                fillOpacity: 1,
+                strokeColor: '#FFFFFF',
+                strokeWeight: 2
+              }
+            });
+          }
 
           // Add nearby users markers
-          nearbyUsers.forEach((user, index) => {
-            setDebugInfo(`Ajout de ${user.name}...`);
-            console.log(`🗺️ Adding marker for ${user.name}...`);
-            
+          console.log('🗺️ Adding nearby users markers...');
+          nearbyUsers.forEach(user => {
             const marker = new window.google.maps.Marker({
               position: { lat: user.lat, lng: user.lng },
               map: map,
@@ -106,7 +112,7 @@ function App() {
               icon: {
                 path: window.google.maps.SymbolPath.CIRCLE,
                 scale: 8,
-                fillColor: user.type === 'business' ? '#10B981' : '#F97316',
+                fillColor: user.type === 'business' ? '#10B981' : '#F59E0B',
                 fillOpacity: 1,
                 strokeColor: '#FFFFFF',
                 strokeWeight: 2
@@ -115,13 +121,20 @@ function App() {
 
             const infoWindow = new window.google.maps.InfoWindow({
               content: `
-                <div style="padding: 12px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-width: 180px; border-radius: 8px;">
-                  <div style="display: flex; align-items: center; margin-bottom: 8px;">
-                    <span style="font-size: 20px; margin-right: 10px;">${user.avatar}</span>
-                    <strong style="font-size: 16px; color: #1f2937;">${user.name}</strong>
-                  </div>
-                  <p style="margin: 4px 0; font-size: 13px; color: #6b7280;">${user.distance} • ${user.type === 'business' ? '💼 Business' : '🤝 Friendly'}</p>
-                  <button onclick="window.sendPing('${user.name}')" style="background: linear-gradient(135deg, #3B82F6, #2563EB); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; width: 100%; transition: all 0.2s;">☕ Envoyer une invitation</button>
+                <div style="padding: 8px; font-family: Inter, sans-serif;">
+                  <div style="font-weight: bold; margin-bottom: 4px;">${user.avatar} ${user.name}</div>
+                  <div style="font-size: 12px; color: #666;">${user.distance}</div>
+                  <div style="font-size: 12px; color: #666;">${user.type === 'business' ? '☕ Business' : '☕ Friendly'}</div>
+                  <button onclick="sendPing('${user.name}')" style="
+                    margin-top: 8px;
+                    padding: 4px 8px;
+                    background: #3B82F6;
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    font-size: 12px;
+                    cursor: pointer;
+                  ">Inviter ☕</button>
                 </div>
               `
             });
@@ -129,14 +142,12 @@ function App() {
             marker.addListener('click', () => {
               infoWindow.open(map, marker);
             });
-
-            setDebugInfo(`${user.name} ajouté !`);
           });
 
-          setDebugInfo('Tous les markers ajoutés !');
-          console.log('🗺️ All markers added successfully');
+          setDebugInfo('Carte prête ! ' + nearbyUsers.length + ' utilisateurs trouvés.');
         } else {
-          console.log('🗺️ Map already loaded or ref not ready');
+          setDebugInfo('Google Maps pas encore chargé...');
+          console.log('🗺️ Google Maps not ready yet');
         }
       } else {
         setDebugInfo('Google Maps pas encore chargé...');
@@ -157,10 +168,9 @@ function App() {
     }, 1000);
 
     return () => {
-      console.log('🗺️ Cleaning up map interval');
       clearInterval(interval);
     };
-  }, [mapLoaded]);
+  }, [mapLoaded, userLocation]);
 
   // Global function for ping
   useEffect(() => {
@@ -169,6 +179,69 @@ function App() {
     };
   }, []);
 
+  // Get user location
+  const getUserLocation = () => {
+    if (!navigator.geolocation) {
+      setLocationError('La géolocalisation n\'est pas supportée par votre navigateur');
+      setLocationLoading(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const location = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        setUserLocation(location);
+        setLocationLoading(false);
+        setLocationError(null);
+        
+        // Center map on user location
+        if (mapInstanceRef.current) {
+          mapInstanceRef.current.setCenter(location);
+          mapInstanceRef.current.setZoom(16);
+        }
+        
+        setDebugInfo('Position trouvée ! Carte centrée sur votre position.');
+      },
+      (error) => {
+        let errorMessage = 'Impossible d\'obtenir votre position';
+        switch(error.code) {
+          case error.PERMISSION_DENIED:
+            errorMessage = 'Vous avez refusé la géolocalisation';
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMessage = 'Position indisponible';
+            break;
+          case error.TIMEOUT:
+            errorMessage = 'Délai d\'attente dépassé';
+            break;
+        }
+        setLocationError(errorMessage);
+        setLocationLoading(false);
+        setDebugInfo(errorMessage);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 300000 // 5 minutes cache
+      }
+    );
+  };
+
+  // Center map on user location
+  const centerOnUser = () => {
+    if (userLocation && mapInstanceRef.current) {
+      mapInstanceRef.current.setCenter(userLocation);
+      mapInstanceRef.current.setZoom(16);
+      setDebugInfo('Carte recentrée sur votre position');
+    } else {
+      getUserLocation();
+    }
+  };
+
+  // Add location status and GPS button
   const toggleAvailability = () => {
     setIsAvailable(!isAvailable);
     alert(isAvailable ? 'Plus disponible' : 'Dispo pour 1h !');
@@ -193,6 +266,26 @@ function App() {
                 </p>
               </div>
             </div>
+            <div className="flex items-center space-x-2">
+              {locationLoading && (
+                <div className="flex items-center space-x-2 text-blue-600">
+                  <Navigation className="w-4 h-4 animate-spin" />
+                  <span className="text-sm">Localisation...</span>
+                </div>
+              )}
+              {locationError && (
+                <div className="flex items-center space-x-2 text-red-600">
+                  <MapPin className="w-4 h-4" />
+                  <span className="text-sm">{locationError}</span>
+                </div>
+              )}
+              {userLocation && !locationLoading && (
+                <div className="flex items-center space-x-2 text-green-600">
+                  <MapPin className="w-4 h-4" />
+                  <span className="text-sm">Position trouvée</span>
+                </div>
+              )}
+            </div>
             <button
               onClick={toggleAvailability}
               className={`px-6 py-3 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 ${
@@ -205,6 +298,12 @@ function App() {
                 <div className={`w-2 h-2 rounded-full ${isAvailable ? 'bg-white animate-pulse' : 'bg-slate-400'}`}></div>
                 <span>{isAvailable ? 'Disponible' : 'Disponible'}</span>
               </span>
+            </button>
+            <button
+              onClick={centerOnUser}
+              className="px-4 py-3 rounded-2xl font-semibold bg-blue-500 text-white shadow-lg shadow-blue-500/25 transition-all duration-300 transform hover:scale-105"
+            >
+              <Navigation className="w-4 h-4" />
             </button>
           </div>
         </div>
