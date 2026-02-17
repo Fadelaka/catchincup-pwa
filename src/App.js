@@ -34,12 +34,20 @@ function App() {
   // Initialize Google Maps
   useEffect(() => {
     const initializeMap = () => {
+      console.log('🗺️ initializeMap called');
+      console.log('🗺️ window.google:', !!window.google);
+      console.log('🗺️ window.google.maps:', !!window.google?.maps);
+      console.log('🗺️ mapRef.current:', !!mapRef.current);
+      console.log('🗺️ mapLoaded:', mapLoaded);
+      
       setDebugInfo('Vérification Google Maps...');
       
       if (window.google && window.google.maps) {
         setDebugInfo('Google Maps trouvé ! Initialisation...');
+        console.log('🗺️ Google Maps API loaded');
         
         if (mapRef.current && !mapLoaded) {
+          console.log('🗺️ Creating map instance...');
           const map = new window.google.maps.Map(mapRef.current, {
             center: { lat: 48.8566, lng: 2.3522 },
             zoom: 16,
@@ -65,11 +73,13 @@ function App() {
             fullscreenControl: false
           });
 
+          console.log('🗺️ Map created:', map);
           mapInstanceRef.current = map;
           setMapLoaded(true);
           setDebugInfo('Carte initialisée ! Ajout des markers...');
 
           // Add user marker
+          console.log('🗺️ Adding user marker...');
           new window.google.maps.Marker({
             position: { lat: 48.8566, lng: 2.3522 },
             map: map,
@@ -87,6 +97,7 @@ function App() {
           // Add nearby users markers
           nearbyUsers.forEach((user, index) => {
             setDebugInfo(`Ajout de ${user.name}...`);
+            console.log(`🗺️ Adding marker for ${user.name}...`);
             
             const marker = new window.google.maps.Marker({
               position: { lat: user.lat, lng: user.lng },
@@ -123,9 +134,13 @@ function App() {
           });
 
           setDebugInfo('Tous les markers ajoutés !');
+          console.log('🗺️ All markers added successfully');
+        } else {
+          console.log('🗺️ Map already loaded or ref not ready');
         }
       } else {
         setDebugInfo('Google Maps pas encore chargé...');
+        console.log('🗺️ Google Maps not ready yet');
       }
     };
 
@@ -133,13 +148,18 @@ function App() {
 
     const interval = setInterval(() => {
       if (!mapLoaded) {
+        console.log('🗺️ Retrying map initialization...');
         initializeMap();
       } else {
+        console.log('🗺️ Map loaded, stopping retry');
         clearInterval(interval);
       }
     }, 1000);
 
-    return () => clearInterval(interval);
+    return () => {
+      console.log('🗺️ Cleaning up map interval');
+      clearInterval(interval);
+    };
   }, [mapLoaded]);
 
   // Global function for ping
