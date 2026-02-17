@@ -1,0 +1,25 @@
+<svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Carré dark bleu -->
+  <rect width="192" height="192" rx="32" fill="#1E293B"/>
+  
+  <!-- Logo white inside - C moderne avec tasse café au milieu -->
+  <g transform="translate(96, 96)">
+    <!-- C moderne -->
+    <path d="M-38 -38C-53.5 -38 -66 -25.5 -66 -10C-66 5.5 -53.5 18 -38 18C-22.5 18 -10 5.5 -10 -10C-10 -25.5 -22.5 -38 -38 -38Z" 
+          stroke="white" 
+          stroke-width="8" 
+          fill="none" 
+          stroke-linecap="round"/>
+    
+    <!-- Tasse de café au milieu -->
+    <path d="M-24 0C-24 -6 -19 -11 -13 -11H13C19 -11 24 -6 24 0V6C24 12 19 17 13 17H-13C-19 17 -24 12 -24 6V0Z" 
+          fill="white"/>
+    
+    <!-- Hanse de la tasse -->
+    <path d="M24 -2C27 -2 30 1 30 4C30 7 27 10 24 10" 
+          stroke="white" 
+          stroke-width="6" 
+          stroke-linecap="round"
+          fill="none"/>
+  </g>
+</svg>
