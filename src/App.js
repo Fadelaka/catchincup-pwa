@@ -72,6 +72,17 @@ function App() {
           const map = new window.google.maps.Map(mapRef.current, {
             center: userLocation ? { lat: userLocation.lat, lng: userLocation.lng } : { lat: 48.8566, lng: 2.3522 },
             zoom: 16,
+            zoomControl: true,
+            zoomControlOptions: {
+              position: window.google.maps.ControlPosition.RIGHT_BOTTOM
+            },
+            panControl: true,
+            panControlOptions: {
+              position: window.google.maps.ControlPosition.RIGHT_BOTTOM
+            },
+            gestureHandling: 'auto',
+            scrollwheel: true,
+            draggable: true,
             styles: [
               {
                 "featureType": "poi",
