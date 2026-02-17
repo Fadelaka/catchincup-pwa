@@ -14,10 +14,25 @@ function App() {
   const mapInstanceRef = useRef(null);
 
   const nearbyUsers = [
-    { id: 1, name: 'Emma', distance: '200m', type: 'business', avatar: '👩‍💼', lat: 48.8576, lng: 2.3532 },
-    { id: 2, name: 'Lucas', distance: '350m', type: 'friendly', avatar: '👨‍🎨', lat: 48.8586, lng: 2.3542 },
-    { id: 3, name: 'Sophie', distance: '450m', type: 'business', avatar: '👩‍💻', lat: 48.8596, lng: 2.3552 },
+    { id: 1, name: 'Emma', distance: '200m', type: 'business', avatar: '👩‍💼', lat: 48.8566, lng: 2.3522 },
+    { id: 2, name: 'Lucas', distance: '350m', type: 'friendly', avatar: '👨‍🎨', lat: 48.8576, lng: 2.3532 },
+    { id: 3, name: 'Sophie', distance: '450m', type: 'business', avatar: '👩‍💻', lat: 48.8586, lng: 2.3542 },
   ];
+
+  // Generate nearby users around user location
+  const generateNearbyUsers = (userLat, userLng) => {
+    if (!userLat || !userLng) return nearbyUsers;
+    
+    return [
+      { id: 1, name: 'Emma', distance: '150m', type: 'business', avatar: '👩‍💼', lat: userLat + 0.001, lng: userLng + 0.001 },
+      { id: 2, name: 'Lucas', distance: '250m', type: 'friendly', avatar: '👨‍🎨', lat: userLat - 0.001, lng: userLng + 0.0015 },
+      { id: 3, name: 'Sophie', distance: '350m', type: 'business', avatar: '👩‍💻', lat: userLat + 0.0015, lng: userLng - 0.001 },
+      { id: 4, name: 'Marc', distance: '400m', type: 'friendly', avatar: '👨‍💼', lat: userLat - 0.002, lng: userLng - 0.001 },
+      { id: 5, name: 'Léa', distance: '500m', type: 'business', avatar: '👩‍🎨', lat: userLat + 0.002, lng: userLng + 0.002 },
+    ];
+  };
+
+  const [users, setUsers] = useState(nearbyUsers);
 
   // Register Service Worker for PWA
   useEffect(() => {
@@ -104,7 +119,7 @@ function App() {
 
           // Add nearby users markers
           console.log('🗺️ Adding nearby users markers...');
-          nearbyUsers.forEach(user => {
+          users.forEach(user => {
             const marker = new window.google.maps.Marker({
               position: { lat: user.lat, lng: user.lng },
               map: map,
@@ -144,7 +159,7 @@ function App() {
             });
           });
 
-          setDebugInfo('Carte prête ! ' + nearbyUsers.length + ' utilisateurs trouvés.');
+          setDebugInfo('Carte prête ! ' + users.length + ' utilisateurs trouvés.');
         } else {
           setDebugInfo('Google Maps pas encore chargé...');
           console.log('🗺️ Google Maps not ready yet');
@@ -170,7 +185,7 @@ function App() {
     return () => {
       clearInterval(interval);
     };
-  }, [mapLoaded, userLocation]);
+  }, [mapLoaded, userLocation, users]);
 
   // Global function for ping
   useEffect(() => {
@@ -197,13 +212,17 @@ function App() {
         setLocationLoading(false);
         setLocationError(null);
         
+        // Generate nearby users around user location
+        const nearbyUsersList = generateNearbyUsers(location.lat, location.lng);
+        setUsers(nearbyUsersList);
+        
         // Center map on user location
         if (mapInstanceRef.current) {
           mapInstanceRef.current.setCenter(location);
           mapInstanceRef.current.setZoom(16);
         }
         
-        setDebugInfo('Position trouvée ! Carte centrée sur votre position.');
+        setDebugInfo('Position trouvée ! ' + nearbyUsersList.length + ' utilisateurs proches.');
       },
       (error) => {
         let errorMessage = 'Impossible d\'obtenir votre position';
@@ -251,89 +270,98 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md shadow-lg border-b border-slate-200/50 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 sm:py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center shadow-lg">
-                <img src={logo} alt="CatchinCup" className="w-8 h-8" />
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-slate-900 rounded-xl flex items-center justify-center shadow-lg">
+                <img src={logo} alt="CatchinCup" className="w-6 h-6 sm:w-8 sm:h-8" />
               </div>
               <div className="flex flex-col">
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+                <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}>
                   CatchinCup™
                 </h1>
-                <p className="text-sm text-slate-600 font-medium" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+                <p className="text-xs sm:text-sm text-slate-600 font-medium hidden sm:block" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}>
                   Le temps d'un café à côté
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
-              {locationLoading && (
-                <div className="flex items-center space-x-2 text-blue-600">
-                  <Navigation className="w-4 h-4 animate-spin" />
-                  <span className="text-sm">Localisation...</span>
-                </div>
-              )}
-              {locationError && (
-                <div className="flex items-center space-x-2 text-red-600">
-                  <MapPin className="w-4 h-4" />
-                  <span className="text-sm">{locationError}</span>
-                </div>
-              )}
-              {userLocation && !locationLoading && (
-                <div className="flex items-center space-x-2 text-green-600">
-                  <MapPin className="w-4 h-4" />
-                  <span className="text-sm">Position trouvée</span>
-                </div>
-              )}
+            <div className="flex items-center space-x-1 sm:space-x-2">
+              {/* Location Status - Hidden on mobile */}
+              <div className="hidden sm:flex items-center space-x-2">
+                {locationLoading && (
+                  <div className="flex items-center space-x-2 text-blue-600">
+                    <Navigation className="w-4 h-4 animate-spin" />
+                    <span className="text-sm">Localisation...</span>
+                  </div>
+                )}
+                {locationError && (
+                  <div className="flex items-center space-x-2 text-red-600">
+                    <MapPin className="w-4 h-4" />
+                    <span className="text-sm">GPS refusé</span>
+                  </div>
+                )}
+                {userLocation && !locationLoading && (
+                  <div className="flex items-center space-x-2 text-green-600">
+                    <MapPin className="w-4 h-4" />
+                    <span className="text-sm">Position OK</span>
+                  </div>
+                )}
+              </div>
+              
+              <button
+                onClick={toggleAvailability}
+                className={`px-2 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 transform hover:scale-105 ${
+                  isAvailable 
+                    ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/25' 
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                }`}
+              >
+                <span className="flex items-center space-x-1">
+                  <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${isAvailable ? 'bg-white animate-pulse' : 'bg-slate-400'}`}></div>
+                  <span className="hidden sm:inline">{isAvailable ? 'Disponible' : 'Disponible'}</span>
+                  <span className="sm:hidden">🟢</span>
+                </span>
+              </button>
+              
+              {/* GPS Button */}
+              <button
+                onClick={centerOnUser}
+                className="px-2 sm:px-3 py-1 sm:py-2 rounded-lg sm:rounded-xl font-semibold bg-blue-500 text-white shadow-lg shadow-blue-500/25 transition-all duration-300 transform hover:scale-105"
+              >
+                <Navigation className="w-3 h-3 sm:w-4 sm:h-4" />
+              </button>
             </div>
-            <button
-              onClick={toggleAvailability}
-              className={`px-6 py-3 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 ${
-                isAvailable 
-                  ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/25' 
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-              }`}
-            >
-              <span className="flex items-center space-x-2">
-                <div className={`w-2 h-2 rounded-full ${isAvailable ? 'bg-white animate-pulse' : 'bg-slate-400'}`}></div>
-                <span>{isAvailable ? 'Disponible' : 'Disponible'}</span>
-              </span>
-            </button>
-            <button
-              onClick={centerOnUser}
-              className="px-4 py-3 rounded-2xl font-semibold bg-blue-500 text-white shadow-lg shadow-blue-500/25 transition-all duration-300 transform hover:scale-105"
-            >
-              <Navigation className="w-4 h-4" />
-            </button>
           </div>
         </div>
       </header>
 
       {/* Navigation */}
       <div className="bg-white/60 backdrop-blur-sm border-b border-slate-200/30 sticky top-16 z-40">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex space-x-1">
             <button
               onClick={() => setActiveTab('map')}
-              className={`py-4 px-6 border-b-2 font-medium text-sm transition-all duration-200 ${
+              className={`py-3 sm:py-4 px-3 sm:px-6 border-b-2 font-medium text-xs sm:text-sm transition-all duration-200 ${
                 activeTab === 'map'
                   ? 'border-blue-500 text-blue-600 bg-blue-50/50'
                   : 'border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-50/50'
               }`}
             >
-              <MapPin className="w-4 h-4 inline mr-2" />
-              Carte
+              <MapPin className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Carte</span>
+              <span className="sm:hidden">🗺️</span>
             </button>
             <button
               onClick={() => setActiveTab('profile')}
-              className={`py-4 px-6 border-b-2 font-medium text-sm transition-all duration-200 ${
+              className={`py-3 sm:py-4 px-3 sm:px-6 border-b-2 font-medium text-xs sm:text-sm transition-all duration-200 ${
                 activeTab === 'profile'
                   ? 'border-blue-500 text-blue-600 bg-blue-50/50'
                   : 'border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-50/50'
               }`}
             >
-              <User className="w-4 h-4 inline mr-2" />
-              Profil
+              <User className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Profil</span>
+              <span className="sm:hidden">👤</span>
             </button>
           </div>
         </div>
