@@ -184,10 +184,14 @@ function App() {
               <div className="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center shadow-lg">
                 <img src={logo} alt="CatchinCup" className="w-8 h-8" />
               </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}>
-                CatchinCup™
-              </h1>
-              <span className="text-sm text-slate-500 hidden sm:inline">Le temps d'un café à côté</span>
+              <div className="flex flex-col">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+                  CatchinCup™
+                </h1>
+                <p className="text-sm text-slate-600 font-medium" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}>
+                  Le temps d'un café à côté
+                </p>
+              </div>
             </div>
             <button
               onClick={toggleAvailability}
