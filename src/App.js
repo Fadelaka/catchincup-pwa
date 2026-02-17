@@ -278,10 +278,10 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur-md shadow-lg border-b border-slate-200/50 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 sm:py-4">
+    <div className="h-screen w-screen fixed overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50">
+      {/* Header Compact */}
+      <header className="bg-white/80 backdrop-blur-md shadow-lg border-b border-slate-200/50 fixed top-0 left-0 right-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 sm:space-x-3">
               <div className="w-8 h-8 sm:w-10 sm:h-10 bg-slate-900 rounded-xl flex items-center justify-center shadow-lg">
@@ -291,34 +291,9 @@ function App() {
                 <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}>
                   CatchinCup™
                 </h1>
-                <p className="text-xs sm:text-sm text-slate-600 font-medium hidden sm:block" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}>
-                  Le temps d'un café à côté
-                </p>
               </div>
             </div>
             <div className="flex items-center space-x-1 sm:space-x-2">
-              {/* Location Status - Hidden on mobile */}
-              <div className="hidden sm:flex items-center space-x-2">
-                {locationLoading && (
-                  <div className="flex items-center space-x-2 text-blue-600">
-                    <Navigation className="w-4 h-4 animate-spin" />
-                    <span className="text-sm">Localisation...</span>
-                  </div>
-                )}
-                {locationError && (
-                  <div className="flex items-center space-x-2 text-red-600">
-                    <MapPin className="w-4 h-4" />
-                    <span className="text-sm">GPS refusé</span>
-                  </div>
-                )}
-                {userLocation && !locationLoading && (
-                  <div className="flex items-center space-x-2 text-green-600">
-                    <MapPin className="w-4 h-4" />
-                    <span className="text-sm">Position OK</span>
-                  </div>
-                )}
-              </div>
-              
               <button
                 onClick={toggleAvailability}
                 className={`px-2 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 transform hover:scale-105 ${
@@ -333,226 +308,82 @@ function App() {
                   <span className="sm:hidden">🟢</span>
                 </span>
               </button>
-              
-              {/* GPS Button */}
-              <button
-                onClick={centerOnUser}
-                className="px-2 sm:px-3 py-1 sm:py-2 rounded-lg sm:rounded-xl font-semibold bg-blue-500 text-white shadow-lg shadow-blue-500/25 transition-all duration-300 transform hover:scale-105"
-              >
-                <Navigation className="w-3 h-3 sm:w-4 sm:h-4" />
-              </button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Navigation */}
-      <div className="bg-white/60 backdrop-blur-sm border-b border-slate-200/30 sticky top-16 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex space-x-1">
-            <button
-              onClick={() => setActiveTab('map')}
-              className={`py-3 sm:py-4 px-3 sm:px-6 border-b-2 font-medium text-xs sm:text-sm transition-all duration-200 ${
-                activeTab === 'map'
-                  ? 'border-blue-500 text-blue-600 bg-blue-50/50'
-                  : 'border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-50/50'
-              }`}
-            >
-              <MapPin className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1 sm:mr-2" />
-              <span className="hidden sm:inline">Carte</span>
-              <span className="sm:hidden">🗺️</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('profile')}
-              className={`py-3 sm:py-4 px-3 sm:px-6 border-b-2 font-medium text-xs sm:text-sm transition-all duration-200 ${
-                activeTab === 'profile'
-                  ? 'border-blue-500 text-blue-600 bg-blue-50/50'
-                  : 'border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-50/50'
-              }`}
-            >
-              <User className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1 sm:mr-2" />
-              <span className="hidden sm:inline">Profil</span>
-              <span className="sm:hidden">👤</span>
-            </button>
+      {/* Map Container - Takes 80% of screen */}
+      <div className="fixed top-16 left-0 right-0 bottom-20 z-10">
+        <div className="w-full h-full bg-white/80 backdrop-blur-sm rounded-t-2xl shadow-xl border border-slate-200/50 overflow-hidden">
+          <div className="w-full h-full relative">
+            <div 
+              ref={mapRef} 
+              className="w-full h-full"
+              style={{ minHeight: '100%' }}
+            />
+            {debugInfo && (
+              <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg border border-slate-200/50 z-20">
+                <p className="text-xs text-slate-600">{debugInfo}</p>
+              </div>
+            )}
+            {!mapLoaded && (
+              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <Navigation className="w-8 h-8 text-blue-500 animate-pulse" />
+                  </div>
+                  <p className="text-slate-600 font-medium">Chargement de la carte...</p>
+                  <p className="text-slate-500 text-sm mt-1">{debugInfo}</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        {activeTab === 'map' && (
-          <div className="space-y-6">
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/50 overflow-hidden">
-              <div className="p-6">
-                <h2 className="text-2xl font-bold text-slate-900 mb-2">
-                  {isAvailable ? 'Personnes disponibles' : 'Découvrir votre quartier'}
-                </h2>
-                <p className="text-slate-600 mb-6">
-                  {isAvailable 
-                    ? `${nearbyUsers.length} personnes prêtes pour un café dans un rayon de 500m`
-                    : 'Activez votre disponibilité pour voir qui est autour de vous'
-                  }
-                </p>
-                
-                {!isAvailable ? (
-                  <div className="text-center py-12">
-                    <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Users className="w-10 h-10 text-slate-400" />
-                    </div>
-                    <h3 className="text-lg font-semibold text-slate-900 mb-2">Soyez visible</h3>
-                    <p className="text-slate-600 mb-6">
-                      Personne ne peut vous voir quand vous n'êtes pas disponible
-                    </p>
-                    <button
-                      onClick={toggleAvailability}
-                      className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-3 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25"
-                    >
-                      Devenir disponible
-                    </button>
-                  </div>
-                ) : (
-                  <div className="space-y-6">
-                    {/* Stats Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 border border-blue-200/50">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="text-blue-600 text-sm font-medium">Total</p>
-                            <p className="text-2xl font-bold text-blue-900">{nearbyUsers.length}</p>
-                          </div>
-                          <Users className="w-8 h-8 text-blue-500" />
-                        </div>
-                      </div>
-                      <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-4 border border-emerald-200/50">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="text-emerald-600 text-sm font-medium">Business</p>
-                            <p className="text-2xl font-bold text-emerald-900">{nearbyUsers.filter(u => u.type === 'business').length}</p>
-                          </div>
-                          <Coffee className="w-8 h-8 text-emerald-500" />
-                        </div>
-                      </div>
-                      <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4 border border-orange-200/50">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="text-orange-600 text-sm font-medium">Friendly</p>
-                            <p className="text-2xl font-bold text-orange-900">{nearbyUsers.filter(u => u.type === 'friendly').length}</p>
-                          </div>
-                          <Heart className="w-8 h-8 text-orange-500" />
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Google Maps */}
-                    <div className="relative rounded-2xl overflow-hidden shadow-inner border border-slate-200/50">
-                      <div 
-                        ref={mapRef} 
-                        className="w-full h-96"
-                        style={{ minHeight: '400px' }}
-                      />
-                      {!mapLoaded && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50">
-                          <div className="text-center">
-                            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                              <Navigation className="w-8 h-8 text-blue-500 animate-pulse" />
-                            </div>
-                            <p className="text-slate-600 font-medium">Chargement de la carte...</p>
-                            <p className="text-slate-500 text-sm mt-1">{debugInfo}</p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    
-                    {/* Legend */}
-                    <div className="bg-slate-50 rounded-xl p-4 border border-slate-200/50">
-                      <h3 className="font-semibold text-slate-900 mb-3">Légende</h3>
-                      <div className="grid grid-cols-2 gap-4 text-sm">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-4 h-4 bg-emerald-500 rounded-full shadow-sm"></div>
-                          <span className="text-slate-700">Business</span>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <div className="w-4 h-4 bg-orange-500 rounded-full shadow-sm"></div>
-                          <span className="text-slate-700">Friendly</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
+      {/* Bottom Info Bar - Fixed */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md shadow-lg border-t border-slate-200/50 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-sm font-semibold text-slate-900">
+                  {users.length} personnes dispo
+                </span>
+              </div>
+              <div className="flex items-center space-x-2 text-xs text-slate-600">
+                <MapPin className="w-3 h-3" />
+                <span>Rayon 500m</span>
               </div>
             </div>
-          </div>
-        )}
-
-        {activeTab === 'profile' && (
-          <div className="space-y-6">
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/50 overflow-hidden">
-              <div className="p-6">
-                <h2 className="text-2xl font-bold text-slate-900 mb-6">Mon Profil</h2>
-                
-                <div className="space-y-6">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center text-3xl shadow-lg">
-                      👨‍💻
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-slate-900">Thomas</h3>
-                      <p className="text-slate-600">Développeur passionné de café</p>
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 mt-2">
-                        💼 Business
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="border-t border-slate-200/50 pt-6">
-                    <h4 className="font-semibold text-slate-900 mb-4">Statut actuel</h4>
-                    <div className="bg-slate-50 rounded-xl p-4 border border-slate-200/50">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <div className={`w-3 h-3 rounded-full ${isAvailable ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'}`}></div>
-                          <span className="text-slate-700">
-                            {isAvailable ? 'Disponible pour 60min (rayon 500m)' : 'Non disponible'}
-                          </span>
-                        </div>
-                        <Clock className="w-5 h-5 text-slate-400" />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="border-t border-slate-200/50 pt-6">
-                    <h4 className="font-semibold text-slate-900 mb-4">Préférences</h4>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200/50">
-                        <div className="flex items-center space-x-3">
-                          <MapPin className="w-5 h-5 text-slate-400" />
-                          <span className="text-slate-700">Rayon de recherche</span>
-                        </div>
-                        <span className="text-slate-900 font-medium">500m</span>
-                      </div>
-                      <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200/50">
-                        <div className="flex items-center space-x-3">
-                          <Clock className="w-5 h-5 text-slate-400" />
-                          <span className="text-slate-700">Durée de disponibilité</span>
-                        </div>
-                        <span className="text-slate-900 font-medium">1 heure</span>
-                      </div>
-                      <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200/50">
-                        <div className="flex items-center space-x-3">
-                          <Coffee className="w-5 h-5 text-slate-400" />
-                          <span className="text-slate-700">Type de rencontre</span>
-                        </div>
-                        <span className="text-slate-900 font-medium">Business</span>
-                      </div>
-                    </div>
-                  </div>
+            
+            <div className="flex items-center space-x-2">
+              {locationLoading && (
+                <div className="flex items-center space-x-1 text-blue-600">
+                  <Navigation className="w-3 h-3 animate-spin" />
+                  <span className="text-xs">GPS...</span>
                 </div>
-              </div>
+              )}
+              {locationError && (
+                <div className="flex items-center space-x-1 text-red-600">
+                  <MapPin className="w-3 h-3" />
+                  <span className="text-xs">GPS KO</span>
+                </div>
+              )}
+              {userLocation && !locationLoading && (
+                <div className="flex items-center space-x-1 text-green-600">
+                  <MapPin className="w-3 h-3" />
+                  <span className="text-xs">Position OK</span>
+                </div>
+              )}
             </div>
           </div>
-        )}
-      </main>
+        </div>
+      </div>
     </div>
   );
-}
 
+}
 export default App;
