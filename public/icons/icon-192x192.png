@@ -1,25 +1,45 @@
 <svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Carré dark bleu -->
-  <rect width="192" height="192" rx="32" fill="#1E293B"/>
+  <!-- Fond rond dark bleu -->
+  <circle cx="96" cy="96" r="96" fill="#1E293B"/>
   
-  <!-- Logo white inside - C moderne avec tasse café au milieu -->
+  <!-- Logo rond CatchinCup™ -->
   <g transform="translate(96, 96)">
     <!-- C moderne -->
-    <path d="M-38 -38C-53.5 -38 -66 -25.5 -66 -10C-66 5.5 -53.5 18 -38 18C-22.5 18 -10 5.5 -10 -10C-10 -25.5 -22.5 -38 -38 -38Z" 
+    <path d="M-30 -30C-45 -30 -60 -15 -60 0C-60 15 -45 30 -30 30C-15 30 0 15 0 0C0 -15 -15 -30 -30 -30Z" 
           stroke="white" 
           stroke-width="8" 
           fill="none" 
           stroke-linecap="round"/>
     
-    <!-- Tasse de café au milieu -->
-    <path d="M-24 0C-24 -6 -19 -11 -13 -11H13C19 -11 24 -6 24 0V6C24 12 19 17 13 17H-13C-19 17 -24 12 -24 6V0Z" 
+    <!-- Tasse de café -->
+    <path d="M-19 0C-19 -11 -10 -16 0 -16H19C28 -16 37 -11 37 0V7C37 19 28 28 19 28H-19C-28 28 -37 19 -37 7V0Z" 
           fill="white"/>
     
     <!-- Hanse de la tasse -->
-    <path d="M24 -2C27 -2 30 1 30 4C30 7 27 10 24 10" 
+    <path d="M37 -7C41 -7 45 -3 45 3C45 9 41 13 37 13" 
           stroke="white" 
           stroke-width="6" 
           stroke-linecap="round"
           fill="none"/>
+    
+    <!-- Vapeur de café -->
+    <path d="M-7 -37C-5 -39 -3 -41 0 -43C3 -41 5 -39 7 -37" 
+          stroke="white" 
+          stroke-width="3" 
+          fill="none" 
+          stroke-linecap="round" 
+          opacity="0.7"/>
+    
+    <path d="M7 -33C9 -35 11 -37 13 -39C11 -37 9 -35 7 -33" 
+          stroke="white" 
+          stroke-width="3" 
+          fill="none" 
+          stroke-linecap="round" 
+          opacity="0.5"/>
   </g>
+  
+  <!-- Symbole ™ -->
+  <text x="158" y="38" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">
+    ™
+  </text>
 </svg>
