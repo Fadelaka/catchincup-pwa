@@ -1,0 +1,45 @@
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fond rond dark bleu -->
+  <circle cx="90" cy="90" r="90" fill="#1E293B"/>
+  
+  <!-- Logo CatchinCup™ pour iOS -->
+  <g transform="translate(90, 90)">
+    <!-- C moderne -->
+    <path d="M-28 -28C-42 -28 -56 -14 -56 0C-56 14 -42 28 -28 28C-14 28 0 14 0 0C0 -14 -14 -28 -28 -28Z" 
+          stroke="white" 
+          stroke-width="7" 
+          fill="none" 
+          stroke-linecap="round"/>
+    
+    <!-- Tasse de café -->
+    <path d="M-17 0C-17 -10 -8 -17 0 -17H17C25 -17 34 -10 34 0V14C34 28 25 34 17 34H-17C-25 34 -34 28 -34 14V0Z" 
+          fill="white"/>
+    
+    <!-- Hanse de la tasse -->
+    <path d="M34 -7C40 -7 46 -3 46 3C46 9 41 13 34 13" 
+          stroke="white" 
+          stroke-width="6" 
+          stroke-linecap="round"
+          fill="none"/>
+    
+    <!-- Vapeur de café -->
+    <path d="M-7 -35C-5 -37 -3 -39 0 -41C3 -39 5 -37 7 -35" 
+          stroke="white" 
+          stroke-width="3" 
+          fill="none" 
+          stroke-linecap="round" 
+          opacity="0.7"/>
+    
+    <path d="M7 -31C9 -33 11 -35 13 -37C11 -35 9 -33 7 -31" 
+          stroke="white" 
+          stroke-width="3" 
+          fill="none" 
+          stroke-linecap="round" 
+          opacity="0.5"/>
+  </g>
+  
+  <!-- Symbole ™ -->
+  <text x="148" y="35" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">
+    ™
+  </text>
+</svg>

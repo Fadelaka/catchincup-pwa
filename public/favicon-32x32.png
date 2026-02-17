@@ -1,0 +1,30 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fond rond dark bleu -->
+  <circle cx="16" cy="16" r="16" fill="#1E293B"/>
+  
+  <!-- Logo miniature CatchinCup™ -->
+  <g transform="translate(16, 16)">
+    <!-- C miniature -->
+    <path d="M-5 -5C-7.5 -5 -10 -2.5 -10 0C-10 2.5 -7.5 5 -5 5C-2.5 5 0 2.5 0 0C0 -2.5 -2.5 -5 -5 -5Z" 
+          stroke="white" 
+          stroke-width="1.5" 
+          fill="none" 
+          stroke-linecap="round"/>
+    
+    <!-- Tasse miniature -->
+    <path d="M-3 0C-3 -1.5 -1.5 -2.5 0 -2.5H3C4.5 -2.5 6 -1.5 6 0V1C6 2.5 4.5 4 4.5 4H-3C-4.5 4 -6 2.5 -6 1V0Z" 
+          fill="white"/>
+    
+    <!-- Hanse miniature -->
+    <path d="M6 -1C7 -1 8 -0.5 8 0.5C8 1.5 7.5 2 6 2" 
+          stroke="white" 
+          stroke-width="1" 
+          stroke-linecap="round"
+          fill="none"/>
+  </g>
+  
+  <!-- ™ miniature -->
+  <text x="26" y="6" font-family="Arial, sans-serif" font-size="4" font-weight="bold" fill="white">
+    ™
+  </text>
+</svg>
