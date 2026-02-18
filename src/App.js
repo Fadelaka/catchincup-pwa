@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MapPin, User, Clock, Coffee, Navigation, Star, Timer, Foot, Car, Train } from 'lucide-react';
+import { MapPin, User, Clock, Coffee, Navigation, Star, Timer, FootprintsIcon, Car, Train } from 'lucide-react';
 
 function App() {
   // États pour ta vision
@@ -121,10 +121,10 @@ function App() {
   // Icônes de transport
   const getTransportIcon = (mode) => {
     switch(mode) {
-      case 'walk': return <Foot className="w-4 h-4" />;
+      case 'walk': return <FootprintsIcon className="w-4 h-4" />;
       case 'car': return <Car className="w-4 h-4" />;
       case 'transit': return <Train className="w-4 h-4" />;
-      default: return <Foot className="w-4 h-4" />;
+      default: return <FootprintsIcon className="w-4 h-4" />;
     }
   };
 
