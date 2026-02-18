@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CatchinCup Icon Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .icon-container { margin: 20px 0; }
+        canvas { border: 1px solid #ccc; margin: 10px; }
+    </style>
+</head>
+<body>
+    <h1>🎯 CatchinCup Icon Generator</h1>
+    <p>Génération d'icônes PNG pour PWA iPhone...</p>
+    
+    <div id="icons"></div>
+    
+    <script>
+        function createIcon(size) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            // Fond dégradé bleu/vert
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#3B82F6');
+            gradient.addColorStop(1, '#10B981');
+            
+            // Fond arrondi
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.roundRect(0, 0, size, size, size * 0.15);
+            ctx.fill();
+            
+            // Tasse de café stylisée
+            const cupSize = size * 0.3;
+            const cupX = size * 0.3;
+            const cupY = size * 0.35;
+            
+            ctx.fillStyle = 'white';
+            ctx.strokeStyle = '#1E293B';
+            ctx.lineWidth = size * 0.015;
+            
+            // Corps de la tasse
+            ctx.beginPath();
+            ctx.roundRect(cupX, cupY, cupSize, cupSize * 0.8, cupSize * 0.1);
+            ctx.fill();
+            ctx.stroke();
+            
+            // Anse
+            ctx.beginPath();
+            ctx.arc(cupX + cupSize, cupY + cupSize * 0.4, cupSize * 0.25, -Math.PI/2, Math.PI/2);
+            ctx.stroke();
+            
+            // Soucoupe
+            ctx.beginPath();
+            ctx.ellipse(cupX + cupSize/2, cupY + cupSize * 0.95, cupSize * 0.5, cupSize * 0.1, 0, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+            
+            // Vapeur
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = size * 0.01;
+            ctx.globalAlpha = 0.8;
+            
+            for(let i = 0; i < 3; i++) {
+                ctx.beginPath();
+                ctx.moveTo(cupX + cupSize * 0.2 + i * cupSize * 0.2, cupY - cupSize * 0.1);
+                ctx.quadraticCurveTo(
+                    cupX + cupSize * 0.15 + i * cupSize * 0.2, cupY - cupSize * 0.3,
+                    cupX + cupSize * 0.25 + i * cupSize * 0.2, cupY - cupSize * 0.5
+                );
+                ctx.stroke();
+            }
+            
+            // Texte "CC"
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = '#1E293B';
+            ctx.font = `bold ${size * 0.125}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.fillText('CC', size * 0.5, size * 0.85);
+            
+            return canvas;
+        }
+        
+        // Créer toutes les tailles
+        const sizes = [192, 512, 144, 152, 128, 96, 72];
+        const container = document.getElementById('icons');
+        
+        sizes.forEach(size => {
+            const div = document.createElement('div');
+            div.className = 'icon-container';
+            
+            const title = document.createElement('h3');
+            title.textContent = `Icon ${size}x${size}`;
+            div.appendChild(title);
+            
+            const canvas = createIcon(size);
+            div.appendChild(canvas);
+            
+            const downloadBtn = document.createElement('button');
+            downloadBtn.textContent = `Download icon-${size}x${size}.png`;
+            downloadBtn.onclick = function() {
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `icon-${size}x${size}.png`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                });
+            };
+            div.appendChild(downloadBtn);
+            
+            container.appendChild(div);
+        });
+        
+        // Polyfill pour roundRect si non supporté
+        if (!CanvasRenderingContext2D.prototype.roundRect) {
+            CanvasRenderingContext2D.prototype.roundRect = function(x, y, width, height, radius) {
+                if (width < 2 * radius) radius = width / 2;
+                if (height < 2 * radius) radius = height / 2;
+                this.beginPath();
+                this.moveTo(x + radius, y);
+                this.arcTo(x + width, y, x + width, y + height, radius);
+                this.arcTo(x + width, y + height, x, y + height, radius);
+                this.arcTo(x, y + height, x, y, radius);
+                this.arcTo(x, y, x + width, y, radius);
+                this.closePath();
+                return this;
+            };
+        }
+    </script>
+</body>
+</html>
