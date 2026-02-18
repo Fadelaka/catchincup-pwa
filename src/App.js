@@ -293,21 +293,33 @@ function App() {
                 </h1>
               </div>
             </div>
-            <div className="flex items-center space-x-1 sm:space-x-2">
-              <button
-                onClick={toggleAvailability}
-                className={`px-2 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 transform hover:scale-105 ${
-                  isAvailable 
-                    ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/25' 
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                }`}
-              >
-                <span className="flex items-center space-x-1">
-                  <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${isAvailable ? 'bg-white animate-pulse' : 'bg-slate-400'}`}></div>
-                  <span className="hidden sm:inline">{isAvailable ? 'Disponible' : 'Disponible'}</span>
-                  <span className="sm:hidden">🟢</span>
-                </span>
-              </button>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={toggleAvailability}
+                  className={`px-3 py-2 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 transform hover:scale-105 hover:shadow-lg ${
+                    isAvailable 
+                      ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/25' 
+                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  }`}
+                >
+                  <span className="flex items-center space-x-1">
+                    <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${isAvailable ? 'bg-white animate-pulse' : 'bg-slate-400'}`}></div>
+                    <span className="hidden sm:inline">{isAvailable ? 'Disponible' : 'Indisponible'}</span>
+                    <span className="sm:hidden">{isAvailable ? '🟢' : '🔴'}</span>
+                  </span>
+                </button>
+                
+                <button className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors">
+                  <User className="w-4 h-4" />
+                  <span className="ml-2">Profil</span>
+                </button>
+                
+                <button className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors">
+                  <Settings className="w-4 h-4" />
+                  <span className="ml-2">Paramètres</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
