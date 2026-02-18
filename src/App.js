@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MapPin, User, Heart, Navigation, Coffee, Users, Clock, Map, Search, Filter, Bell, Settings } from 'lucide-react';
+import { MapPin, User, Heart, Navigation, Coffee, Users, Clock, Map, Search, Filter, Bell, Settings, BarChart3, Layout, Zap } from 'lucide-react';
 import logo from './logo.svg';
+import UserCard from './components/UserCard';
+import SearchBar from './components/SearchBar';
+import ThemeSelector from './components/ThemeSelector';
+import Analytics from './components/Analytics';
+import Templates from './components/Templates';
 
 function App() {
   // États - style Base44 moderne
@@ -190,6 +195,8 @@ function App() {
                 {isAvailable ? '✓ Disponible' : 'Indisponible'}
               </button>
               
+              <ThemeSelector />
+              
               <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
                 <Bell className="w-5 h-5 text-gray-600" />
               </button>
@@ -209,6 +216,8 @@ function App() {
             {[
               { id: 'discover', label: 'Découvrir', icon: Map },
               { id: 'map', label: 'Carte', icon: Map },
+              { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+              { id: 'templates', label: 'Templates', icon: Layout },
               { id: 'messages', label: 'Messages', icon: Heart },
               { id: 'profile', label: 'Profil', icon: User }
             ].map(tab => (
@@ -230,44 +239,13 @@ function App() {
       </div>
 
       {/* Barre de recherche et filtres */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex flex-col sm:flex-row gap-4">
-            {/* Recherche */}
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Rechercher des personnes..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-
-            {/* Filtres */}
-            <div className="flex space-x-2">
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center space-x-2"
-              >
-                <Filter className="w-4 h-4" />
-                <span>Filtres</span>
-              </button>
-              
-              <select
-                value={selectedFilter}
-                onChange={(e) => setSelectedFilter(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="all">Tous</option>
-                <option value="business">☕ Business</option>
-                <option value="friendly">☕ Friendly</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
+      <SearchBar
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        selectedFilter={selectedFilter}
+        setSelectedFilter={setSelectedFilter}
+        onToggleFilters={() => setShowFilters(!showFilters)}
+      />
 
       {/* Contenu principal */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -289,48 +267,14 @@ function App() {
             {activeTab === 'discover' && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredUsers.map(user => (
-                  <div key={user.id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-                    {/* Header carte */}
-                    <div className="p-6">
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-center space-x-3">
-                          <div className="text-3xl">{user.avatar}</div>
-                          <div>
-                            <h3 className="text-lg font-semibold text-gray-900">{user.name}</h3>
-                            <div className="flex items-center space-x-2 text-sm text-gray-500">
-                              <MapPin className="w-3 h-3" />
-                              <span>{user.distance}</span>
-                              <span>•</span>
-                              <span>{user.type === 'business' ? '☕ Business' : '☕ Friendly'}</span>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div className="text-right">
-                          <div className="flex items-center space-x-1 text-sm">
-                            <span className="text-yellow-500">⭐</span>
-                            <span className="font-medium">{user.rating}</span>
-                          </div>
-                          <div className="text-xs text-gray-500">{user.meetups} meetups</div>
-                        </div>
-                      </div>
-                      
-                      <p className="mt-3 text-gray-600 text-sm">{user.bio}</p>
-                    </div>
-                    
-                    {/* Actions */}
-                    <div className="px-6 pb-6">
-                      <button
-                        onClick={() => handleInvite(user)}
-                        className="w-full bg-blue-600 text-white rounded-lg py-3 font-medium hover:bg-blue-700 transition-colors transform hover:scale-105"
-                      >
-                        Inviter pour un café ☕
-                      </button>
-                    </div>
-                  </div>
+                  <UserCard key={user.id} user={user} onInvite={handleInvite} />
                 ))}
               </div>
             )}
+
+            {activeTab === 'analytics' && <Analytics />}
+
+            {activeTab === 'templates' && <Templates />}
 
             {activeTab === 'map' && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
