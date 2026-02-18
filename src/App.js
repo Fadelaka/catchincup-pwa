@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MapPin, User, Clock, Coffee, Navigation, Star, Timer, FootprintsIcon, Car, Train, MessageCircle, Users, UserCheck, X, Check } from 'lucide-react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 
 function App() {
   // États principaux
@@ -13,6 +15,7 @@ function App() {
   const [showOnboarding, setShowOnboarding] = useState(true);
   const [countdown, setCountdown] = useState(0);
   const [activeTab, setActiveTab] = useState('discover');
+  const [selectedUser, setSelectedUser] = useState(null);
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
 
@@ -51,7 +54,7 @@ function App() {
     }
   ]);
 
-  // Utilisateurs proches - profils authentiques
+  // Utilisateurs proches - profils authentiques avec coordonnées
   const nearbyUsers = [
     {
       id: 1,
@@ -67,7 +70,9 @@ function App() {
       availability: 45,
       rating: 4.8,
       meetups: 12,
-      verified: true
+      verified: true,
+      lat: 48.8566,
+      lng: 2.3522
     },
     {
       id: 2,
@@ -83,7 +88,9 @@ function App() {
       availability: 30,
       rating: 4.9,
       meetups: 18,
-      verified: true
+      verified: true,
+      lat: 48.8576,
+      lng: 2.3532
     },
     {
       id: 3,
@@ -99,7 +106,9 @@ function App() {
       availability: 60,
       rating: 4.7,
       meetups: 8,
-      verified: false
+      verified: false,
+      lat: 48.8586,
+      lng: 2.3542
     },
     {
       id: 4,
@@ -115,7 +124,9 @@ function App() {
       availability: 90,
       rating: 4.6,
       meetups: 5,
-      verified: false
+      verified: false,
+      lat: 48.8596,
+      lng: 2.3552
     },
     {
       id: 5,
@@ -131,7 +142,9 @@ function App() {
       availability: 45,
       rating: 4.9,
       meetups: 22,
-      verified: true
+      verified: true,
+      lat: 48.8556,
+      lng: 2.3512
     }
   ];
 
@@ -189,8 +202,15 @@ function App() {
           const { latitude, longitude } = position.coords;
           setUserLocation({ lat: latitude, lng: longitude });
         },
-        (error) => console.error('Erreur de localisation:', error)
+        (error) => {
+          // Position par défaut (Paris) si géolocalisation échoue
+          setUserLocation({ lat: 48.8566, lng: 2.3522 });
+          console.error('Erreur de localisation:', error);
+        }
       );
+    } else {
+      // Position par défaut si navigateur ne supporte pas
+      setUserLocation({ lat: 48.8566, lng: 2.3522 });
     }
   }, []);
 
@@ -204,19 +224,10 @@ function App() {
     }
   }, [isAvailable, countdown]);
 
-  // Initialiser Google Maps
+  // Initialiser OpenStreetMap au lieu de Google Maps
   useEffect(() => {
-    if (window.google && window.google.maps && userLocation && mapRef.current) {
-      const map = new window.google.maps.Map(mapRef.current, {
-        center: userLocation,
-        zoom: 15,
-        styles: [
-          { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] }
-        ]
-      });
-      
-      mapInstanceRef.current = map;
-    }
+    // La carte sera initialisée par react-leaflet automatiquement
+    // Plus besoin d'initialiser manuellement
   }, [userLocation]);
 
   // Actions
@@ -249,14 +260,57 @@ function App() {
     ));
   };
 
-  // Icônes de transport
-  const getTransportIcon = (mode) => {
-    switch(mode) {
-      case 'walk': return <FootprintsIcon className="w-4 h-4" />;
-      case 'car': return <Car className="w-4 h-4" />;
-      case 'transit': return <Train className="w-4 h-4" />;
-      default: return <FootprintsIcon className="w-4 h-4" />;
-    }
+  // Icônes personnalisées pour Leaflet
+  const createCustomIcon = (user) => {
+    const iconHtml = `
+      <div style="
+        background: ${user.verified ? colors.gold : colors.caramel};
+        border: 2px solid white;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        cursor: pointer;
+      ">
+        ${user.avatar}
+      </div>
+    `;
+    
+    return {
+      html: iconHtml,
+      className: 'custom-marker',
+      iconSize: [32, 32],
+      iconAnchor: [16, 16],
+      popupAnchor: [0, -16]
+    };
+  };
+
+  // Icône pour utilisateur
+  const userIcon = {
+    html: `
+      <div style="
+        background: #3B82F6;
+        border: 3px solid white;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      ">
+        📍
+      </div>
+    `,
+    className: 'user-marker',
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
+    popupAnchor: [0, -20]
   };
 
   // Couleurs du thème
@@ -267,6 +321,16 @@ function App() {
     gold: '#D4AF37',
     white: '#FFFFFF',
     gray: '#6B7280'
+  };
+
+  // Icônes de transport
+  const getTransportIcon = (mode) => {
+    switch(mode) {
+      case 'walk': return <FootprintsIcon className="w-4 h-4" />;
+      case 'car': return <Car className="w-4 h-4" />;
+      case 'transit': return <Train className="w-4 h-4" />;
+      default: return <FootprintsIcon className="w-4 h-4" />;
+    }
   };
 
   // Écran d'onboarding
@@ -452,118 +516,216 @@ function App() {
   );
 
   // Page Découvrir
-  const DiscoverPage = () => (
-    <div className="space-y-4">
-      {/* Carte */}
-      <div className="relative">
-        <div ref={mapRef} className="w-full h-96 rounded-lg overflow-hidden"></div>
-        
-        {/* Filtres sur la carte */}
-        <div className="absolute top-4 left-4 right-4">
-          <div className="bg-white rounded-lg shadow-lg p-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                {getTransportIcon(travelMode)}
-                <span className="text-sm font-medium">{travelTime} min</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                  meetingType === 'friendly' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'
-                }`}>
-                  {meetingType === 'friendly' ? '☕ Friendly' : '💼 Business'}
-                </span>
-                <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
-                  {intention}
-                </span>
+  const DiscoverPage = () => {
+    // Import dynamique de Leaflet pour éviter les problèmes SSR
+    const [L, setL] = useState(null);
+    const [mapReady, setMapReady] = useState(false);
+
+    useEffect(() => {
+      import('leaflet').then((leaflet) => {
+        setL(leaflet.default);
+        setMapReady(true);
+      });
+    }, []);
+
+    if (!mapReady || !userLocation) {
+      return (
+        <div className="w-full h-96 bg-gray-100 rounded-lg flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Chargement de la carte...</p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="space-y-4">
+        {/* Carte OpenStreetMap */}
+        <div className="relative">
+          <div className="w-full h-96 rounded-lg overflow-hidden">
+            <MapContainer
+              center={[userLocation.lat, userLocation.lng]}
+              zoom={15}
+              style={{ height: '100%', width: '100%' }}
+            >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              />
+              
+              {/* Marqueur utilisateur */}
+              <Marker
+                position={[userLocation.lat, userLocation.lng]}
+                icon={L.divIcon(userIcon)}
+              >
+                <Popup>
+                  <div className="text-center">
+                    <p className="font-medium">Votre position</p>
+                    <p className="text-sm text-gray-600">Disponible pour un café ☕</p>
+                  </div>
+                </Popup>
+              </Marker>
+
+              {/* Marqueurs des utilisateurs */}
+              {nearbyUsers.map(user => (
+                <Marker
+                  key={user.id}
+                  position={[user.lat, user.lng]}
+                  icon={L.divIcon(createCustomIcon(user))}
+                  eventHandlers={{
+                    click: () => setSelectedUser(user)
+                  }}
+                >
+                  <Popup>
+                    <div className="p-2">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <span className="text-lg">{user.avatar}</span>
+                        <div>
+                          <h4 className="font-medium">{user.name}</h4>
+                          <p className="text-sm text-gray-500">{user.distance}</p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => sendInvitation(user)}
+                        className="w-full px-3 py-1 text-white text-sm rounded-lg"
+                        style={{ backgroundColor: colors.caramel }}
+                      >
+                        Inviter
+                      </button>
+                    </div>
+                  </Popup>
+                </Marker>
+              ))}
+            </MapContainer>
+          </div>
+          
+          {/* Filtres sur la carte */}
+          <div className="absolute top-4 left-4 right-4">
+            <div className="bg-white rounded-lg shadow-lg p-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  {getTransportIcon(travelMode)}
+                  <span className="text-sm font-medium">{travelTime} min</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    meetingType === 'friendly' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'
+                  }`}>
+                    {meetingType === 'friendly' ? '☕ Friendly' : '💼 Business'}
+                  </span>
+                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                    {intention}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Utilisateurs disponibles */}
-      <div>
-        <h3 className="text-lg font-semibold mb-3" style={{ color: colors.espresso }}>Personnes disponibles</h3>
-        <div className="space-y-3">
-          {nearbyUsers.map(user => (
-            <div key={user.id} className="bg-white rounded-lg shadow-sm border p-4" style={{ borderColor: colors.caramel }}>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="text-2xl">{user.avatar}</div>
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-2">
-                      <h4 className="font-medium" style={{ color: colors.espresso }}>{user.name}</h4>
-                      {user.verified && (
-                        <div className="w-4 h-4 rounded-full flex items-center justify-center" style={{ backgroundColor: colors.gold }}>
-                          <Check className="w-2 h-2 text-white" />
-                        </div>
-                      )}
-                    </div>
-                    <p className="text-sm text-gray-500">{user.distance} • {user.intention}</p>
-                    <p className="text-xs text-gray-400 mt-1">{user.bio}</p>
-                    <div className="flex items-center space-x-2 mt-2">
-                      <div className="flex items-center space-x-1 text-xs">
-                        <Star className="w-3 h-3 text-yellow-500 fill-current" />
-                        <span>{user.rating}</span>
+        {/* Liste simplifiée - détails seulement au clic */}
+        <div>
+          <h3 className="text-lg font-semibold mb-3" style={{ color: colors.espresso }}>
+            Personnes disponibles ({nearbyUsers.length})
+          </h3>
+          <div className="space-y-2">
+            {nearbyUsers.map(user => (
+              <div
+                key={user.id}
+                onClick={() => setSelectedUser(selectedUser?.id === user.id ? null : user)}
+                className="bg-white rounded-lg shadow-sm border p-3 cursor-pointer transition-all hover:shadow-md"
+                style={{ borderColor: colors.caramel }}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="text-xl">{user.avatar}</div>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <h4 className="font-medium" style={{ color: colors.espresso }}>{user.name}</h4>
+                        {user.verified && (
+                          <div className="w-3 h-3 rounded-full flex items-center justify-center" style={{ backgroundColor: colors.gold }}>
+                            <Check className="w-1.5 h-1.5 text-white" />
+                          </div>
+                        )}
                       </div>
-                      <span className="text-xs text-gray-400">• {user.meetups} meetups</span>
+                      <p className="text-sm text-gray-500">{user.distance} • {user.intention}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-1 text-xs">
+                      <Star className="w-3 h-3 text-yellow-500 fill-current" />
+                      <span>{user.rating}</span>
+                    </div>
+                    <div className="flex items-center space-x-1 text-sm" style={{ color: colors.caramel }}>
+                      <Timer className="w-3 h-3" />
+                      <span>{user.availability} min</span>
                     </div>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="flex items-center space-x-1 text-sm" style={{ color: colors.caramel }}>
-                    <Timer className="w-3 h-3" />
-                    <span>{user.availability} min</span>
+                
+                {/* Détails affichés seulement au clic */}
+                {selectedUser?.id === user.id && (
+                  <div className="mt-3 pt-3 border-t" style={{ borderColor: colors.caramel }}>
+                    <p className="text-sm text-gray-600 mb-2">{user.bio}</p>
+                    <div className="flex items-center justify-between">
+                      <div className="text-xs text-gray-500">
+                        <span className="mr-3">☕ {user.coffeePreference}</span>
+                        <span>📍 {user.favoritePlace}</span>
+                      </div>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          sendInvitation(user);
+                        }}
+                        className="px-3 py-1 text-white text-sm rounded-lg hover:opacity-90 transition-colors"
+                        style={{ backgroundColor: colors.caramel }}
+                      >
+                        Inviter
+                      </button>
+                    </div>
                   </div>
-                  <button 
-                    onClick={() => sendInvitation(user)}
-                    className="mt-2 px-3 py-1 text-white text-sm rounded-lg hover:opacity-90 transition-colors"
-                    style={{ backgroundColor: colors.caramel }}
-                  >
-                    Inviter
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Cafés partenaires */}
+        <div>
+          <h3 className="text-lg font-semibold mb-3" style={{ color: colors.espresso }}>Cafés partenaires</h3>
+          <div className="space-y-3">
+            {partnerCafes.map(cafe => (
+              <div key={cafe.id} className="bg-white rounded-lg shadow-sm border p-4" style={{ borderColor: colors.caramel }}>
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-2">
+                      <h4 className="font-medium" style={{ color: colors.espresso }}>{cafe.name}</h4>
+                      {cafe.featured && (
+                        <span className="px-2 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: colors.gold, color: 'white' }}>
+                          ⭐ Partenaire
+                        </span>
+                      )}
+                      {cafe.hasQR && (
+                        <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">QR</span>
+                      )}
+                    </div>
+                    <p className="text-sm text-gray-500">{cafe.distance} • -{cafe.discount}</p>
+                    <div className="flex items-center space-x-1 mt-1">
+                      <Star className="w-3 h-3 text-yellow-500 fill-current" />
+                      <span className="text-xs text-gray-600">{cafe.rating}</span>
+                    </div>
+                  </div>
+                  <button className="px-3 py-1 text-sm rounded-lg hover:bg-gray-100 transition-colors" style={{ borderColor: colors.caramel, borderWidth: 1 }}>
+                    Voir
                   </button>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-
-      {/* Cafés partenaires */}
-      <div>
-        <h3 className="text-lg font-semibold mb-3" style={{ color: colors.espresso }}>Cafés partenaires</h3>
-        <div className="space-y-3">
-          {partnerCafes.map(cafe => (
-            <div key={cafe.id} className="bg-white rounded-lg shadow-sm border p-4" style={{ borderColor: colors.caramel }}>
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center space-x-2">
-                    <h4 className="font-medium" style={{ color: colors.espresso }}>{cafe.name}</h4>
-                    {cafe.featured && (
-                      <span className="px-2 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: colors.gold, color: 'white' }}>
-                        ⭐ Partenaire
-                      </span>
-                    )}
-                    {cafe.hasQR && (
-                      <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">QR</span>
-                    )}
-                  </div>
-                  <p className="text-sm text-gray-500">{cafe.distance} • -{cafe.discount}</p>
-                  <div className="flex items-center space-x-1 mt-1">
-                    <Star className="w-3 h-3 text-yellow-500 fill-current" />
-                    <span className="text-xs text-gray-600">{cafe.rating}</span>
-                  </div>
-                </div>
-                <button className="px-3 py-1 text-sm rounded-lg hover:bg-gray-100 transition-colors" style={{ borderColor: colors.caramel, borderWidth: 1 }}>
-                  Voir
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+    );
+  };
 
   // Page Invitations
   const InvitationsPage = () => (
