@@ -1,0 +1,48 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="whiteBg512" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#ffffff"/>
+      <stop offset="70%" style="stop-color:#f7fafc"/>
+      <stop offset="100%" style="stop-color:#edf2f7"/>
+    </radialGradient>
+    <filter id="glowWhite512">
+      <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Fond avec coins arrondis -->
+  <rect width="512" height="512" rx="102" fill="url(#whiteBg512)"/>
+  
+  <!-- Bordure subtile -->
+  <rect width="512" height="512" rx="102" fill="none" stroke="rgba(45,55,72,0.2)" stroke-width="10"/>
+  
+  <!-- Tasse de café -->
+  <g filter="url(#glowWhite512)">
+    <!-- Corps de la tasse -->
+    <rect x="102" y="128" width="205" height="155" rx="20" fill="#2d3748" stroke="#4a5568" stroke-width="12"/>
+    
+    <!-- Anse -->
+    <path d="M 307 173 Q 361 173 361 227 Q 361 281 307 281" fill="none" stroke="#4a5568" stroke-width="12" stroke-linecap="round"/>
+    
+    <!-- Soucoupe -->
+    <ellipse cx="204" y="304" rx="133" ry="24" fill="#2d3748" stroke="#4a5568" stroke-width="12"/>
+    
+    <!-- Vapeur -->
+    <g opacity="0.7">
+      <path d="M 133 115 Q 120 80 133 40" fill="none" stroke="#2d3748" stroke-width="10" stroke-linecap="round"/>
+      <path d="M 173 115 Q 160 80 173 40" fill="none" stroke="#2d3748" stroke-width="10" stroke-linecap="round"/>
+      <path d="M 213 115 Q 200 80 213 40" fill="none" stroke="#2d3748" stroke-width="10" stroke-linecap="round"/>
+      <path d="M 253 115 Q 240 80 253 40" fill="none" stroke="#2d3748" stroke-width="10" stroke-linecap="round"/>
+    </g>
+    
+    <!-- Texte CC -->
+    <text x="256" y="420" font-family="Arial, sans-serif" font-size="93" font-weight="bold" text-anchor="middle" fill="#2d3748" stroke="#4a5568" stroke-width="5">CC</text>
+    
+    <!-- Signature -->
+    <text x="256" y="485" font-family="Arial, sans-serif" font-size="20" text-anchor="middle" fill="rgba(45,55,72,0.5)">CatchinCup</text>
+  </g>
+</svg>
