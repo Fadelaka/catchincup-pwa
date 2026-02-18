@@ -354,7 +354,7 @@ function App() {
                 </span>
               </div>
               <div className="flex items-center space-x-2 text-xs text-slate-600">
-                <MapPin className="w-3 h-3" />
+                <MapPin className="w-6 h-6 text-blue-500" />
                 <span>Rayon 500m</span>
               </div>
             </div>
