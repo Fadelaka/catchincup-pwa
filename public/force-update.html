@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CatchinCup™ - Force Update</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #FFFAF5;
+            margin: 0;
+            padding: 20px;
+            color: #2C1810;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(44, 24, 16, 0.1);
+        }
+        h1 {
+            color: #2C1810;
+            margin-bottom: 20px;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 20px auto;
+            border-radius: 12px;
+        }
+        .button {
+            background: #2C1810;
+            color: #FFFAF5;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        .button:hover {
+            background: #D4A574;
+            transform: scale(1.05);
+        }
+        .instructions {
+            text-align: left;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        .step {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .critical {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CATCHINCUP™</h1>
+        
+        <!-- Logo #5 Premium -->
+        <img src="icons/icon-192x192-dark.svg" alt="Logo #5 Premium" class="logo">
+        
+        <h2>Logo #5 - Typographie Moderne</h2>
+        
+        <div class="critical">
+            <strong>⚠️ ACTION CRITIQUE REQUISE:</strong><br>
+            Safari garde l'ancienne version en cache PWA.<br>
+            Il faut DÉSINSTALLER la PWA existante !
+        </div>
+        
+        <div class="instructions">
+            <h3>PROCÉDURE GARANTIE pour Safari Desktop:</h3>
+            <div class="step">1. Clique "Désinstaller PWA" ci-dessous</div>
+            <div class="step">2. Ferme complètement Safari</div>
+            <div class="step">3. Vide cache: Develop > Empty Caches</div>
+            <div class="step">4. Redémarre Safari</div>
+            <div class="step">5. Recharge: https://catchincup-pwa.vercel.app</div>
+            <div class="step">6. Réinstalle la PWA si souhaité</div>
+        </div>
+        
+        <button class="button" onclick="uninstallPWA()">🗑️ Désinstaller PWA</button>
+        <button class="button" onclick="forceReload()">🔄 Force Reload</button>
+        
+        <div class="success">
+            <strong>✅ RÉSULTAT ATTENDU:</strong><br>
+            Logo #5 typographie moderne partout<br>
+            CC monogram dans header<br>
+            Design premium épuré unifié
+        </div>
+    </div>
+
+    <script>
+        function uninstallPWA() {
+            // Désinstaller la PWA
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                    registrations.forEach(function(registration) {
+                        registration.unregister();
+                    });
+                });
+            }
+            
+            // Vider tous les caches
+            if ('caches' in window) {
+                caches.keys().then(function(names) {
+                    names.forEach(function(name) {
+                        caches.delete(name);
+                    });
+                });
+            }
+            
+            // Vider localStorage
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            alert('PWA désinstallée et caches vidés !\n\nFerme Safari complètement et recharge.');
+        }
+        
+        function forceReload() {
+            // Force reload avec timestamp
+            const timestamp = new Date().getTime();
+            window.location.href = 'https://catchincup-pwa.vercel.app?t=' + timestamp;
+        }
+    </script>
+</body>
+</html>
