@@ -1,48 +1,17 @@
-<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <radialGradient id="darkBg512" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" style="stop-color:#2d3748"/>
-      <stop offset="70%" style="stop-color:#1a202c"/>
-      <stop offset="100%" style="stop-color:#0f1419"/>
-    </radialGradient>
-    <filter id="glow512">
-      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
-      <feMerge>
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-  </defs>
+<svg width="512" height="512" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+  <!-- fond luxe dark -->
+  <rect width="192" height="192" rx="48" fill="#2C1810"/>
   
-  <!-- Fond avec coins arrondis -->
-  <rect width="512" height="512" rx="102" fill="url(#darkBg512)"/>
+  <!-- Texte moderne -->
+  <text x="96" y="96" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="20" font-weight="300" 
+        text-anchor="middle" fill="#E5C29F" letter-spacing="1.5">
+    CATCHIN
+  </text>
+  <text x="96" y="114" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="20" font-weight="300" 
+        text-anchor="middle" fill="#E5C29F" letter-spacing="1.5">
+    CUP™
+  </text>
   
-  <!-- Bordure subtile -->
-  <rect width="512" height="512" rx="102" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="10"/>
-  
-  <!-- Tasse de café -->
-  <g filter="url(#glow512)">
-    <!-- Corps de la tasse -->
-    <rect x="102" y="128" width="205" height="155" rx="20" fill="white" stroke="#e2e8f0" stroke-width="12"/>
-    
-    <!-- Anse -->
-    <path d="M 307 173 Q 361 173 361 227 Q 361 281 307 281" fill="none" stroke="#e2e8f0" stroke-width="12" stroke-linecap="round"/>
-    
-    <!-- Soucoupe -->
-    <ellipse cx="204" y="304" rx="133" ry="24" fill="white" stroke="#e2e8f0" stroke-width="12"/>
-    
-    <!-- Vapeur -->
-    <g opacity="0.7">
-      <path d="M 133 115 Q 120 80 133 40" fill="none" stroke="white" stroke-width="10" stroke-linecap="round"/>
-      <path d="M 173 115 Q 160 80 173 40" fill="none" stroke="white" stroke-width="10" stroke-linecap="round"/>
-      <path d="M 213 115 Q 200 80 213 40" fill="none" stroke="white" stroke-width="10" stroke-linecap="round"/>
-      <path d="M 253 115 Q 240 80 253 40" fill="none" stroke="white" stroke-width="10" stroke-linecap="round"/>
-    </g>
-    
-    <!-- Texte CC -->
-    <text x="256" y="420" font-family="Arial, sans-serif" font-size="93" font-weight="bold" text-anchor="middle" fill="white" stroke="#e2e8f0" stroke-width="5">CC</text>
-    
-    <!-- Signature -->
-    <text x="256" y="485" font-family="Arial, sans-serif" font-size="20" text-anchor="middle" fill="rgba(255,255,255,0.5)">CatchinCup</text>
-  </g>
+  <!-- Ligne subtile -->
+  <line x1="64" y1="124" x2="128" y2="124" stroke="#E5C29F" stroke-width="0.5" opacity="0.6"/>
 </svg>
