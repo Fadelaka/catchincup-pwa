@@ -1,1 +1,89 @@
-{"name": "CatchinCup™ - Le temps d'un café à côté", "short_name": "CatchinCup™", "description": "Trouvez des personnes disponibles pour un café près de vous", "start_url": ".", "display": "standalone", "background_color": "#f8fafc", "theme_color": "#1E293B", "orientation": "portrait", "scope": ".", "icons": [{"src": "icons/icon-72x72.png", "sizes": "72x72", "type": "image/png", "purpose": "maskable any"}, {"src": "icons/icon-96x96.png", "sizes": "96x96", "type": "image/png", "purpose": "maskable any"}, {"src": "icons/icon-128x128.png", "sizes": "128x128", "type": "image/png", "purpose": "maskable any"}, {"src": "icons/icon-144x144.png", "sizes": "144x144", "type": "image/png", "purpose": "maskable any"}, {"src": "icons/icon-152x152.png", "sizes": "152x152", "type": "image/png", "purpose": "maskable any"}, {"src": "icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable any"}, {"src": "icons/icon-384x384.png", "sizes": "384x384", "type": "image/png", "purpose": "maskable any"}, {"src": "icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable any"}], "splash_pages": null, "categories": ["social", "lifestyle", "utilities"], "lang": "fr", "dir": "ltr"}
+{
+  "name": "CatchinCup™ - Le temps d'un café à côté",
+  "short_name": "CatchinCup™",
+  "description": "Trouvez des personnes disponibles pour un café près de vous",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#FFF8F0",
+  "theme_color": "#C4A484",
+  "orientation": "portrait",
+  "scope": ".",
+  "icons": [
+    {
+      "src": "icons/logo-dark-improved.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/logo-white-improved.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/logo-dark-improved.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/logo-white-improved.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "splash_pages": null,
+  "categories": ["social", "lifestyle", "utilities"],
+  "lang": "fr",
+  "dir": "ltr"
+}
