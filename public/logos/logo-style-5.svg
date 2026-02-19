@@ -1,0 +1,17 @@
+<svg width="192" height="192" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+  <!-- fond luxe -->
+  <rect width="192" height="192" rx="48" fill="#2C1810"/>
+  
+  <!-- Texte moderne -->
+  <text x="96" y="96" font-family="Inter, sans-serif" font-size="24" font-weight="300" 
+        text-anchor="middle" fill="#E5C29F" letter-spacing="2">
+    CATCHIN
+  </text>
+  <text x="96" y="116" font-family="Inter, sans-serif" font-size="24" font-weight="300" 
+        text-anchor="middle" fill="#E5C29F" letter-spacing="2">
+    CUP™
+  </text>
+  
+  <!-- Ligne subtile -->
+  <line x1="60" y1="128" x2="132" y2="128" stroke="#E5C29F" stroke-width="0.5" opacity="0.6"/>
+</svg>

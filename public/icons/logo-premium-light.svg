@@ -1,0 +1,17 @@
+<svg width="192" height="192" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+  <!-- fond luxe light -->
+  <rect width="192" height="192" rx="48" fill="#FFFAF5"/>
+  
+  <!-- Texte moderne -->
+  <text x="96" y="96" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="20" font-weight="300" 
+        text-anchor="middle" fill="#2C1810" letter-spacing="1.5">
+    CATCHIN
+  </text>
+  <text x="96" y="114" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="20" font-weight="300" 
+        text-anchor="middle" fill="#2C1810" letter-spacing="1.5">
+    CUP™
+  </text>
+  
+  <!-- Ligne subtile -->
+  <line x1="64" y1="124" x2="128" y2="124" stroke="#2C1810" stroke-width="0.5" opacity="0.6"/>
+</svg>

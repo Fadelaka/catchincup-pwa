@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CatchinCup™ - Logos Minimaliste Luxe</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #FFFAF5;
+            margin: 0;
+            padding: 20px;
+            color: #2C1810;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #2C1810;
+            margin-bottom: 40px;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        .logos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .logo-item {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(44, 24, 16, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .logo-item:hover {
+            transform: translateY(-5px);
+        }
+        .logo-item img {
+            width: 192px;
+            height: 192px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+        }
+        .logo-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #2C1810;
+            margin-bottom: 10px;
+        }
+        .logo-description {
+            font-size: 14px;
+            color: #8B7355;
+            line-height: 1.5;
+        }
+        .choice-button {
+            background: #2C1810;
+            color: #FFFAF5;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        .choice-button:hover {
+            background: #D4A574;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CATCHINCUP™ - LOGOS MINIMALISTE LUXE</h1>
+        
+        <div class="logos-grid">
+            <div class="logo-item">
+                <img src="logo-style-1.svg" alt="Style 1 - Tasse Ultra-Minimaliste">
+                <div class="logo-title">Style 1 - Tasse Ultra-Minimaliste</div>
+                <div class="logo-description">Lignes fines, contours épurés, design minimaliste avec une goutte subtile</div>
+                <button class="choice-button" onclick="chooseLogo(1)">Choisir ce style</button>
+            </div>
+            
+            <div class="logo-item">
+                <img src="logo-style-2.svg" alt="Style 2 - Monogramme CC Moderne">
+                <div class="logo-title">Style 2 - Monogramme CC Moderne</div>
+                <div class="logo-description">Typographie moderne, lettres fusionnées, point café subtil</div>
+                <button class="choice-button" onclick="chooseLogo(2)">Choisir ce style</button>
+            </div>
+            
+            <div class="logo-item">
+                <img src="logo-style-3.svg" alt="Style 3 - Icône Abstraite Café">
+                <div class="logo-title">Style 3 - Icône Abstraite Café</div>
+                <div class="logo-description">Forme géométrique, dégradé luxe, cercle avec tasse stylisée</div>
+                <button class="choice-button" onclick="chooseLogo(3)">Choisir ce style</button>
+            </div>
+            
+            <div class="logo-item">
+                <img src="logo-style-4.svg" alt="Style 4 - Goutte + Tasse Fusion">
+                <div class="logo-title">Style 4 - Goutte + Tasse Fusion</div>
+                <div class="logo-description">Goutte café stylisée, tasse minimaliste, fusion élégante</div>
+                <button class="choice-button" onclick="chooseLogo(4)">Choisir ce style</button>
+            </div>
+            
+            <div class="logo-item">
+                <img src="logo-style-5.svg" alt="Style 5 - Typographie Moderne">
+                <div class="logo-title">Style 5 - Typographie Moderne</div>
+                <div class="logo-description">Texte élégant, espacements généreux, ligne subtile</div>
+                <button class="choice-button" onclick="chooseLogo(5)">Choisir ce style</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function chooseLogo(styleNumber) {
+            alert('Tu as choisi le Style ' + styleNumber + ' !\n\nJe vais maintenant intégrer ce logo dans l\'application CatchinCup™.');
+            // Tu pourras aussi copier ce message pour me dire ton choix
+        }
+    </script>
+</body>
+</html>

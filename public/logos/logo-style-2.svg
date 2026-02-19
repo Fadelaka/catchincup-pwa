@@ -1,0 +1,15 @@
+<svg width="192" height="192" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fond luxe -->
+  <rect width="192" height="192" rx="48" fill="#FFFAF5"/>
+  
+  <!-- Monogramme CC -->
+  <g fill="#2C1810">
+    <!-- Premier C -->
+    <path d="M 60 96 Q 60 72 84 72 Q 96 72 96 84 Q 96 96 84 96 Z"/>
+    <!-- Deuxième C -->
+    <path d="M 96 96 Q 96 72 120 72 Q 132 72 132 84 Q 132 96 120 96 Z"/>
+  </g>
+  
+  <!-- Point café subtil -->
+  <circle cx="96" cy="120" r="3" fill="#D4A574" opacity="0.6"/>
+</svg>

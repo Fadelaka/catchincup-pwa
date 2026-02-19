@@ -1,0 +1,14 @@
+<svg width="192" height="192" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+  <!-- fond luxe clair -->
+  <rect width="192" height="192" rx="48" fill="#FFFAF5"/>
+  
+  <!-- Goutte café -->
+  <path d="M 96 64 Q 80 80 80 96 Q 80 112 96 112 Q 112 112 112 96 Q 112 80 96 64" 
+        fill="#2C1810" opacity="0.9"/>
+  
+  <!-- Tasse minimaliste -->
+  <g stroke="#D4A574" stroke-width="1.5" fill="none">
+    <path d="M 72 96 L 72 108 Q 72 112 76 112 L 116 112 Q 120 112 120 108 L 120 96"/>
+    <path d="M 120 100 Q 128 100 128 104 Q 128 108 120 108"/>
+  </g>
+</svg>

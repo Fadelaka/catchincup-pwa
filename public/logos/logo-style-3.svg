@@ -1,0 +1,20 @@
+<svg width="192" height="192" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fond dégradé luxe -->
+  <defs>
+    <linearGradient id="luxeBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2C1810"/>
+      <stop offset="100%" style="stop-color:#8B7355"/>
+    </linearGradient>
+  </defs>
+  <rect width="192" height="192" rx="48" fill="url(#luxeBg)"/>
+  
+  <!-- Forme abstraite café -->
+  <g stroke="#E5C29F" stroke-width="2" fill="none">
+    <!-- Cercle extérieur -->
+    <circle cx="96" cy="96" r="32"/>
+    <!-- Forme tasse stylisée -->
+    <path d="M 80 88 Q 80 104 88 104 L 104 104 Q 112 104 112 88"/>
+    <!-- Vague vapeur -->
+    <path d="M 88 80 Q 92 76 96 80 Q 100 76 104 80"/>
+  </g>
+</svg>
