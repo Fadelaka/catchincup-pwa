@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CatchinCup™ - Cache Clear</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #FFFAF5;
+            margin: 0;
+            padding: 20px;
+            color: #2C1810;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(44, 24, 16, 0.1);
+        }
+        h1 {
+            color: #2C1810;
+            margin-bottom: 20px;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 20px auto;
+            border-radius: 12px;
+        }
+        .button {
+            background: #2C1810;
+            color: #FFFAF5;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        .button:hover {
+            background: #D4A574;
+            transform: scale(1.05);
+        }
+        .instructions {
+            text-align: left;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        .step {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CATCHINCUP™</h1>
+        
+        <!-- Nouveau logo premium -->
+        <img src="icons/logo-premium-light.svg" alt="Nouveau Logo Premium" class="logo">
+        
+        <h2>Nouveau Logo Premium Intégré !</h2>
+        
+        <div class="instructions">
+            <h3>Pour voir le nouveau logo sur iPhone :</h3>
+            <div class="step">1. Ferme complètement Safari</div>
+            <div class="step">2. Settings > Safari > Clear History > All History</div>
+            <div class="step">3. Redémarre ton iPhone</div>
+            <div class="step">4. Recharge : https://catchincup-pwa.vercel.app</div>
+        </div>
+        
+        <button class="button" onclick="goToApp()">Voir l'App</button>
+        <button class="button" onclick="clearCache()">Forcer Cache Clear</button>
+        
+        <p style="margin-top: 30px; color: #8B7355; font-size: 14px;">
+            Si le logo ne change pas, supprime l'ancienne PWA et réinstalle-la
+        </p>
+    </div>
+
+    <script>
+        function goToApp() {
+            window.location.href = 'https://catchincup-pwa.vercel.app';
+        }
+        
+        function clearCache() {
+            // Force cache clear
+            if ('caches' in window) {
+                caches.keys().then(function(names) {
+                    names.forEach(function(name) {
+                        caches.delete(name);
+                    });
+                });
+            }
+            // Clear service workers
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                    registrations.forEach(function(registration) {
+                        registration.unregister();
+                    });
+                });
+            }
+            alert('Cache vidé ! Redémarre Safari et recharge l\'app.');
+        }
+    </script>
+</body>
+</html>
