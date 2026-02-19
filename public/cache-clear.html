@@ -60,6 +60,14 @@
             margin: 10px 0;
             padding-left: 20px;
         }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
     </style>
 </head>
 <body>
@@ -67,29 +75,37 @@
         <h1>CATCHINCUP™</h1>
         
         <!-- Nouveau logo premium -->
-        <img src="icons/logo-premium-light.svg" alt="Nouveau Logo Premium" class="logo">
+        <img src="icons/icon-192x192-dark.svg" alt="Nouveau Logo Premium" class="logo">
         
-        <h2>Nouveau Logo Premium Intégré !</h2>
+        <h2>Logo Premium #5 Intégré !</h2>
         
-        <div class="instructions">
-            <h3>Pour voir le nouveau logo sur iPhone :</h3>
-            <div class="step">1. Ferme complètement Safari</div>
-            <div class="step">2. Settings > Safari > Clear History > All History</div>
-            <div class="step">3. Redémarre ton iPhone</div>
-            <div class="step">4. Recharge : https://catchincup-pwa.vercel.app</div>
+        <div class="warning">
+            <strong>⚠️ IMPORTANT:</strong> Le logo est bon ici mais l'app principale utilise encore l'ancien cache PWA.
         </div>
         
-        <button class="button" onclick="goToApp()">Voir l'App</button>
-        <button class="button" onclick="clearCache()">Forcer Cache Clear</button>
+        <div class="instructions">
+            <h3>Procédure GARANTIE pour iPhone :</h3>
+            <div class="step">1. Clique "Forcer Cache Clear" ci-dessous</div>
+            <div class="step">2. Clique "Voir l'App" ci-dessous</div>
+            <div class="step">3. SI toujours l'ancien: ferme Safari complètement</div>
+            <div class="step">4. Settings > Safari > Clear History > All History</div>
+            <div class="step">5. Redémarre ton iPhone</div>
+            <div class="step">6. Recharge: https://catchincup-pwa.vercel.app</div>
+        </div>
+        
+        <button class="button" onclick="clearCache()">1. Forcer Cache Clear</button>
+        <button class="button" onclick="goToApp()">2. Voir l'App</button>
         
         <p style="margin-top: 30px; color: #8B7355; font-size: 14px;">
-            Si le logo ne change pas, supprime l'ancienne PWA et réinstalle-la
+            Si l'ancien logo persiste, supprime la PWA et réinstalle-la depuis Safari
         </p>
     </div>
 
     <script>
         function goToApp() {
-            window.location.href = 'https://catchincup-pwa.vercel.app';
+            // Force timestamp pour bypass cache
+            const timestamp = new Date().getTime();
+            window.location.href = 'https://catchincup-pwa.vercel.app?t=' + timestamp;
         }
         
         function clearCache() {
@@ -109,7 +125,7 @@
                     });
                 });
             }
-            alert('Cache vidé ! Redémarre Safari et recharge l\'app.');
+            alert('Cache et Service Workers vidés !\n\nMaintenant clique "Voir l\'App"');
         }
     </script>
 </body>
